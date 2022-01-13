@@ -12,7 +12,7 @@ const Product = connection.define('products',{
         allowNull: false
     },
     price:{
-        type: Sequelize.INTEGER,
+        type: Sequelize.DOUBLE,
         allowNull: false
     }
 });

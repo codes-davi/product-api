@@ -2,9 +2,93 @@ const express = require('express');
 const router = express.Router();
 const Category = require('../database/Category');
 const Product = require('../database/Product');
+const Validation = require('../handlers/Validation');
 
 router.get('/', (req,res)=>{
-    res.send('');
+    
+    Product.findAll().then(products=>{
+        if (products.length > 0) {
+            res.statusCode = 200;
+            res.json(products);
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(err=>{
+        console.log(err);
+        res.sendStatus(500);
+    });
+
+});
+
+router.get('/:id', (req,res)=>{
+    
+    let id = parseInt(req.params.id);
+
+    if (!isNaN(id)) {
+        Product.findByPk(id).then(product => {
+            if (product != undefined) {
+                res.statusCode = 200;
+                res.json(product);
+            } else {
+                res.sendStatus(404);
+            }
+        }).catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+    } else {
+        res.sendStatus(400);
+    }
+
+});
+
+router.post('/', (req,res)=>{
+
+    let name = req.body.name.trim();
+    let description = req.body.description;
+    let price = req.body.price;
+    let categoryId = req.body.categoryId;
+
+    if (Validation.validateProduct(name, price, description)) {
+        Product.create({
+            name: name,
+            price: price,
+            description:description,
+            categoryId: categoryId
+        }).then(()=>{
+            res.sendStatus(200);
+        }).catch(err=>{
+            console.log(err);
+            res.sendStatus(500);
+        });
+    } else {
+        res.sendStatus(400);
+    }
+
+});
+
+router.delete('/:id', (req,res)=>{
+    let id = parseInt(req.params.id);
+
+    if (!isNaN(id) && id != 0) {
+        Product.destroy({
+            where:{
+                id:id
+            }
+        }).then(row=>{
+            if (row > 0) {
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(404);
+            }
+        }).catch(err=>{
+            console.log(err);
+            res.sendStatus(500);
+        });
+    } else {
+        res.sendStatus(400);
+    }
+
 });
 
 module.exports = router;

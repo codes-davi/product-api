@@ -20,7 +20,7 @@ router.get('/', (req,res)=>{
 
 router.get('/:id', (req,res)=>{
     
-    let id = req.params.id;
+    let id = parseInt(req.params.id);
 
     if (!isNaN(id)) {
         Category.findByPk(id).then(category=>{
@@ -70,7 +70,7 @@ router.post('/', (req,res)=>{
     let title = req.body.title;
     let description = req.body.description;
 
-    if(title != undefined){
+    if(title != undefined && title.trim() != ''){
         Category.findOne({
             where:{
                 title:title
@@ -99,57 +99,27 @@ router.post('/', (req,res)=>{
     }
 });
 
-router.put('/:id', (req,res)=>{
+router.put('/:id', (req, res) => {
 
-    let id = req.params.id;
+    let id = parseInt(req.params.id);
     let title = req.body.title;
     let description = req.body.description;
 
     if (!isNaN(id) || (description && title) == undefined) {
-        if (title == undefined) {
-            Category.update({
-                description: description
-            },{
-                where:{
-                    id:id
-                }
-            }).then(row=>{
-                console.log(row);
-                res.sendStatus(200);
-            }).catch(err=>{
-                console.log(err);
-                res.sendStatus(500);
-            });
-        }else if (description == undefined){
-            Category.update({
-                title: title
-            }, {
-                where: {
-                    id: id
-                }
-            }).then(row=>{
-                console.log(row);
-                res.sendStatus(200);
-            }).catch(err=>{
-                console.log(err);
-                res.sendStatus(500);
-            });
-        }else{
-            Category.update({
-                title: title,
-                description: description
-            }, {
-                where: {
-                    id: id
-                }
-            }).then(row=>{
-                console.log(row);
-                res.sendStatus(200);
-            }).catch(err=>{
-                console.log(err);
-                res.sendStatus(500);
-            });
-        }
+        Category.update({
+            description: description,
+            title: title
+        }, {
+            where: {
+                id: id
+            }
+        }).then(row => {
+            console.log(row);
+            res.sendStatus(200);
+        }).catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
     } else {
         res.sendStatus(400);
     }
@@ -158,7 +128,7 @@ router.put('/:id', (req,res)=>{
 
 router.delete('/:id', (req,res)=>{
     
-    let id = req.params.id;
+    let id = parseInt(req.params.id);
 
     if (!isNaN(id)) {
         Category.destroy({
