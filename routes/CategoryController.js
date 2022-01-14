@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Category = require('../database/Category');
+const authHandler = require('../handlers/AuthHandler');
+
+//jwt auth middleware
+router.use(authHandler);
 
 router.get('/', (req,res)=>{
    

@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const Category = require('../database/Category');
 const Product = require('../database/Product');
 const Validation = require('../handlers/Validation');
+const authHandler = require('../handlers/AuthHandler');
+
+//jwt auth middleware
+router.use(authHandler);
 
 router.get('/', (req,res)=>{
     
