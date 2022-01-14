@@ -10,7 +10,6 @@ const auth = (req, res, next) => {
     const bearer = authToken.split(' ');
     let token = bearer[1];
 
-    console.log(secret);
     jwt.verify(token, secret, (err, data) => {
         
         if (err) return res.sendStatus(401);
