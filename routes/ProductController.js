@@ -44,10 +44,8 @@ router.get('/:id', (req,res)=>{
 
 router.post('/', (req,res)=>{
 
-    let name = req.body.name.trim();
-    let description = req.body.description;
-    let price = req.body.price;
-    let categoryId = req.body.categoryId;
+    let name = req.body.name?.trim();
+    let {description, price, categoryId} = req.body;
 
     if (Validation.validateProduct(name, price, description)) {
         Product.create({
@@ -94,10 +92,7 @@ router.delete('/:id', (req,res)=>{
 router.put('/:id', (req,res)=>{
     
     let id = parseInt(req.params.id);
-    let name = req.body.name;
-    let description = req.body.description;
-    let price = req.body.price;
-    let categoryId = req.body.categoryId;
+    let {name, description, price, categoryId} = req.body;
 
     if (isNaN(id)) return res.sendStatus(400);
 

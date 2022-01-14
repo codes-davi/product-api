@@ -67,8 +67,7 @@ router.get('/title/:title', (req,res)=>{
 
 router.post('/', (req,res)=>{
 
-    let title = req.body.title;
-    let description = req.body.description;
+    let {title, description} = req.body;
 
     if(title != undefined && title.trim() != ''){
         Category.findOne({
@@ -102,8 +101,7 @@ router.post('/', (req,res)=>{
 router.put('/:id', (req, res) => {
 
     let id = parseInt(req.params.id);
-    let title = req.body.title;
-    let description = req.body.description;
+    let {title, description} = req.body;
 
     if (!isNaN(id) || (description && title) == undefined) {
         Category.update({
