@@ -53,13 +53,13 @@ router.post('/', (req,res)=>{
         Product.create({
             name: name,
             price: price,
-            description:description,
+            description: description,
             categoryId: categoryId
-        }).then(()=>{
+        }).then(() => {
             res.sendStatus(200);
-        }).catch(err=>{
+        }).catch(err => {
             console.log(err);
-            res.sendStatus(500);
+            res.status(500).json(err.parent.code);
         });
     } else {
         res.sendStatus(400);
@@ -88,6 +88,35 @@ router.delete('/:id', (req,res)=>{
     } else {
         res.sendStatus(400);
     }
+
+});
+
+router.put('/:id', (req,res)=>{
+    
+    let id = parseInt(req.params.id);
+    let name = req.body.name;
+    let description = req.body.description;
+    let price = req.body.price;
+    let categoryId = req.body.categoryId;
+
+    if (isNaN(id)) return res.sendStatus(400);
+
+    Product.update({
+        name: name,
+        price: price,
+        description: description,
+        categoryId: categoryId
+    }, {
+        where: {
+            id: id
+        }
+    }).then((row) => {
+        if (row == 0) return res.sendStatus(400);
+        res.sendStatus(200);
+    }).catch(() => {
+        res.sendStatus(500);
+    });
+
 
 });
 
