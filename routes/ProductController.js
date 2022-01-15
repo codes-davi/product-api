@@ -10,8 +10,7 @@ router.use(authHandler);
 
 router.get('/', (req,res)=>{
 
-    let page = req.query.page;
-    let limit = req.query.limit;
+    let {page, limit} = req.query;
     let offset;
     let {data, valid} = Validation.validateQuery(page, limit);
 
