@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require('../database/Product');
 const Validation = require('../handlers/Validation');
 const authHandler = require('../handlers/AuthHandler');
+const {product: hateoas} = require('../handlers/HateoasDefault');
 
 //jwt auth middleware
 router.use(authHandler);
@@ -12,7 +13,7 @@ router.get('/', (req,res)=>{
     Product.findAll().then(products=>{
         if (products.length > 0) {
             res.statusCode = 200;
-            res.json(products);
+            res.json({products, _links: hateoas});
         } else {
             res.sendStatus(404);
         }
@@ -31,7 +32,7 @@ router.get('/:id', (req,res)=>{
         Product.findByPk(id).then(product => {
             if (product != undefined) {
                 res.statusCode = 200;
-                res.json(product);
+                res.json({product, _links: hateoas});
             } else {
                 res.sendStatus(404);
             }

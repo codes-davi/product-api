@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
+const {auth: hateoas} = require('../handlers/HateoasDefault');
 
 //setting jwt secret
 const secret = 'd6s%ts*gh&5&s';
@@ -14,7 +15,7 @@ router.get('/', (req,res)=>{
     jwt.sign({user: user}, secret, {expiresIn: '1h'},(err,token)=>{
         if(err) return res.sendStatus(500);
 
-        res.status(200).json({token: token});
+        res.status(200).json({token: token, _links: hateoas});
     });
 
 });

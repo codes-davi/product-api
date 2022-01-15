@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Category = require('../database/Category');
 const authHandler = require('../handlers/AuthHandler');
+const {category: hateoas} = require('../handlers/HateoasDefault');
 
 //jwt auth middleware
 router.use(authHandler);
@@ -11,7 +12,7 @@ router.get('/', (req,res)=>{
     Category.findAll().then(categories=>{
         if(categories.length > 0){
             res.statusCode = 200;
-            res.json(categories);
+            res.json({categories, _links: hateoas});
         }else{
             res.sendStatus(404);
         }
@@ -30,7 +31,7 @@ router.get('/:id', (req,res)=>{
         Category.findByPk(id).then(category=>{
             if(category != undefined){
                 res.statusCode = 200;
-                res.json(category);
+                res.json({category, _links: hateoas});
             }else{
                 res.sendStatus(404);
             }
@@ -55,7 +56,7 @@ router.get('/title/:title', (req,res)=>{
         }).then(category=>{
             if(category != undefined){
                 res.statusCode = 200;
-                res.json(category);
+                res.json({category, _links: hateoas});
             }else{
                 res.sendStatus(404);
             }
