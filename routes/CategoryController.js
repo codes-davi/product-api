@@ -3,13 +3,28 @@ const router = express.Router();
 const Category = require('../database/Category');
 const authHandler = require('../handlers/AuthHandler');
 const {category: hateoas} = require('../handlers/HateoasDefault');
+const Validation = require('../handlers/Validation');
 
 //jwt auth middleware
 router.use(authHandler);
 
 router.get('/', (req,res)=>{
    
-    Category.findAll().then(categories=>{
+    let page = req.query.page;
+    let limit = req.query.limit;
+    let offset;
+    let {data, valid} = Validation.validateQuery(page, limit);
+
+    if (!valid) return res.sendStatus(400);
+    
+    if (page && limit) {
+        offset = Validation.offset(page,limit);
+    }
+
+    Category.findAll({
+        limit: data.limit,
+        offset: offset
+    }).then(categories=>{
         if(categories.length > 0){
             res.statusCode = 200;
             res.json({categories, _links: hateoas});

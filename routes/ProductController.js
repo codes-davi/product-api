@@ -9,8 +9,22 @@ const {product: hateoas} = require('../handlers/HateoasDefault');
 router.use(authHandler);
 
 router.get('/', (req,res)=>{
+
+    let page = req.query.page;
+    let limit = req.query.limit;
+    let offset;
+    let {data, valid} = Validation.validateQuery(page, limit);
+
+    if (!valid) return res.sendStatus(400);
     
-    Product.findAll().then(products=>{
+    if (page && limit) {
+        offset = Validation.offset(page,limit);
+    }
+
+    Product.findAll({
+        limit: data.limit,
+        offset: offset
+    }).then(products=>{
         if (products.length > 0) {
             res.statusCode = 200;
             res.json({products, _links: hateoas});
