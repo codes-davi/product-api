@@ -5,6 +5,10 @@ const productController = require('./routes/ProductController');
 const categoryController = require('./routes/CategoryController');
 const {router: authController} = require('./routes/AuthController');
 const {home: hateoas} = require('./handlers/HateoasDefault');
+const cors = require('cors');
+
+//enabling cors
+app.use(cors());
 
 //setting body encode
 app.use(express.urlencoded({ extended: true }));
