@@ -1,5 +1,7 @@
 # product-api
-Product Management Restful API
+Product Management Restful API - 
+
+Rest Architecture, HATEOAS, JWT Authentication.
 
 ![image](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 ![image](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
